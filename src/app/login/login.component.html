@@ -1,0 +1,12 @@
+<h2>Login</h2>
+<div>
+  <label for="username">Nom d'utilisateur:</label>
+  <input id="username" [(ngModel)]="username" type="text" />
+</div>
+<div>
+  <label for="password">Mot de passe:</label>
+  <input id="password" [(ngModel)]="password" type="password" />
+</div>
+<button (click)="onLogin()">Login</button>
+
+<p>{{ message }}</p>

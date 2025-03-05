@@ -1,0 +1,82 @@
+<!-- Example Bootstrap navbar (optional) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/home">Datadex</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <!-- Show Login/Register if NOT logged in -->
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" routerLink="/login">Login</a>
+        </li>
+        <li class="nav-item" *ngIf="!isLoggedIn">
+          <a class="nav-link" routerLink="/register">Register</a>
+        </li>
+
+        <!-- Show 'Disconnect' if logged in -->
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a class="nav-link" (click)="onDisconnect()">Disconnect</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h2>Pokémon List</h2>
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col"></th> <!-- Image column (no title) -->
+        <th scope="col">Name</th>
+        <th scope="col">Types</th>
+        <th scope="col">Region</th>
+        <th scope="col">Evolution</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of pokemons">
+        <td class="align-middle">{{ p['identifiant unique'] }}</td>
+
+        <!-- Image Column (Now aligned correctly) -->
+        <td class="align-middle text-center">
+          <img [src]="p.image" alt="{{ p.nom }}" class="pokemon-img">
+        </td>
+
+        <td class="align-middle">{{ p.nom }}</td>
+        <td class="align-middle">{{ p.types ? p.types.join(', ') : '' }}</td>
+        <td class="align-middle">{{ p.region_origine }}</td>
+        <td class="align-middle">{{ p.evolution }}</td>
+        <td class="align-middle">
+          <!-- If user is NOT logged in OR not the creator, show "Visualiser" -->
+          <button
+            *ngIf="!currentUser || !isCreator(p)"
+            class="btn btn-primary"
+            [routerLink]="['/pokemon/view', p['identifiant unique']]">
+            Visualiser
+          </button>
+
+          <!-- If user is logged in AND is the creator, show "Edit" -->
+          <button
+            *ngIf="currentUser && isCreator(p)"
+            class="btn btn-warning"
+            [routerLink]="['/pokemon/edit', p['identifiant unique']]">
+            Edit
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

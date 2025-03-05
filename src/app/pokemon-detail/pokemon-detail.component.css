@@ -1,0 +1,60 @@
+/* Image Styling */
+.pokemon-box {
+    border: 2px solid #ddd; /* Creates a box around the image */
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    
+    /* Center the image properly */
+    display: flex;
+    align-items: center;  /* Centers vertically */
+    justify-content: center; /* Centers horizontally */
+  
+    height: 300px;  /* Adjust for a consistent look */
+    width: 100%; /* Full width of its parent */
+  }
+  
+  .pokemon-img {
+    width: 100%;  /* Forces image to fill container width */
+    height: 100%; /* Forces image to fill container height */
+    object-fit: cover; /* Ensures it scales properly */
+    border-radius: 10px; /* Optional: Make corners match the box */
+  }
+  
+/* Table Styling */
+.capacite-table th,
+.capacite-table td {
+  text-align: center; /* Centers text for readability */
+  vertical-align: middle; /* Aligns content properly */
+}
+
+/* Set column widths for numeric fields */
+.col-pouvoir,
+.col-utilisation,
+.col-precision,
+.col-action {
+  width: 7%; /* Adjust as needed */
+  min-width: 60px; /* Prevents excessive shrinking */
+}
+
+.col-categorie,
+.col-type {
+    width: 10%; /* Adjust as needed */
+    min-width: 60px; /* Prevents excessive shrinking */
+  }
+
+/* Ensure table is responsive */
+.capacite-table {
+  width: 100%;
+  table-layout: auto; /* Allows the table to adjust properly */
+}
+
+/* Button spacing */
+.btn-delete {
+    padding: 3px 10px;
+    font-size: 14px;
+  }
+  
+  .btn-add-capacite {
+    margin-top: 10px;
+  }
