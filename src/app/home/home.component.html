@@ -52,7 +52,7 @@
 
         <!-- Image Column (Now aligned correctly) -->
         <td class="align-middle text-center">
-          <img [src]="p.image" alt="{{ p.nom }}" class="pokemon-img">
+          <img [src]="p.image" alt="" class="pokemon-img">
         </td>
 
         <td class="align-middle">{{ p.nom }}</td>
@@ -67,7 +67,7 @@
             [routerLink]="['/pokemon/view', p['identifiant unique']]">
             Visualiser
           </button>
-
+        
           <!-- If user is logged in AND is the creator, show "Edit" -->
           <button
             *ngIf="currentUser && isCreator(p)"
@@ -79,4 +79,197 @@
       </tr>
     </tbody>
   </table>
+  <button *ngIf="currentUser" class="btn btn-success" (click)="onAddPokemon()">➕ Ajouter un Pokémon</button>
 </div>
+
+<!-- Modale d'Ajout de Pokémon -->
+<div class="modal fade" id="addPokemonModal" tabindex="-1" aria-labelledby="addPokemonModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addPokemonModalLabel">Ajouter un Pokémon</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="saveNewPokemon()">
+
+          <!-- Nom & Image -->
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Nom</label>
+              <input type="text" class="form-control" [(ngModel)]="newPokemon.nom" name="nom" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Image URL</label>
+              <input type="text" class="form-control" [(ngModel)]="newPokemon.image" name="image">
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" [(ngModel)]="newPokemon.description" name="description"></textarea>
+          </div>
+
+          <!-- Types (Max 2) -->
+          <div class="mb-3">
+            <label class="form-label">Types</label>
+            <div class="d-flex">
+              <select class="form-select me-2" [(ngModel)]="newType" name="newType">
+                <option value="" disabled selected>Choisir un type</option>
+                <option *ngFor="let type of pokemonTypes" [value]="type">{{ type }}</option>
+              </select>
+              <button type="button" class="btn btn-primary" (click)="addType()" [disabled]="!newType || newPokemon.types.length >= 2">➕ Ajouter</button>
+            </div>
+            <div class="mt-2">
+              <span *ngFor="let type of newPokemon.types; let i = index" class="badge bg-info text-dark fs-5 p-2 me-2">
+                {{ type }}
+                <button type="button" class="btn btn-sm btn-light ms-2" (click)="removeType(i)">✖</button>
+              </span>
+            </div>
+          </div>
+
+          <!-- Évolution & Sous-Évolution -->
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Évolution</label>
+              <input type="text" class="form-control" [(ngModel)]="newPokemon.evolution" name="evolution">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sous-Évolution</label>
+              <input type="text" class="form-control" [(ngModel)]="newPokemon.sous_evolution" name="sous_evolution">
+            </div>
+          </div>
+
+          <!-- Nature & Sexe -->
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <label class="form-label">Nature</label>
+              <select class="form-select" [(ngModel)]="newPokemon.nature" name="nature">
+                <option *ngFor="let nature of natures" [value]="nature">{{ nature }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sexe</label>
+              <select class="form-select" [(ngModel)]="newPokemon.sexe" name="sexe">
+                <option *ngFor="let sexe of sexes" [value]="sexe">{{ sexe }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Région & Capacité Spéciale -->
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <label class="form-label">Région d'Origine</label>
+              <input type="text" class="form-control" [(ngModel)]="newPokemon.region_origine" name="region_origine">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Capacité Spéciale</label>
+              <input type="text" class="form-control" [(ngModel)]="newPokemon.capacite_speciale" name="capacite_speciale">
+            </div>
+          </div>
+
+          <!-- Poids & Taille -->
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <label class="form-label">Poids (kg)</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                [(ngModel)]="newPokemon.poids" 
+                name="poids">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Taille (m)</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                [(ngModel)]="newPokemon.taille" 
+                name="taille">
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="card shadow-sm mt-4">
+            <div class="card-header bg-primary text-white"><h5 class="mb-0">Stats</h5></div>
+            <div class="card-body">
+              <!-- Points de Vie (pv$) -->
+               
+              <div class="row mt-2">
+                <div class="col-md-6"><label class="form-label">Niveau</label><input type="number" class="form-control" [(ngModel)]="newPokemon.niveau" name="niveau" min="1"></div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col-md-6"><label class="form-label">Points de Vie</label><input type="number" class="form-control" [(ngModel)]="newPokemon.points_de_vie" name="points_de_vie" min="1" required></div>
+                <div class="col-md-6"><label class="form-label">Vitesse</label><input type="number" class="form-control" [(ngModel)]="newPokemon.vitesse" name="vitesse" min="1"></div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col-md-6"><label class="form-label">Attaque</label><input type="number" class="form-control" [(ngModel)]="newPokemon.attaque" name="attaque" min="1"></div>
+                <div class="col-md-6"><label class="form-label">Attaque Spéciale</label><input type="number" class="form-control" [(ngModel)]="newPokemon.attaque_special" name="attqueSpeciale" min="1"></div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-6"><label class="form-label">Défense</label><input type="number" class="form-control" [(ngModel)]="newPokemon.defense" name="defense" min="1"></div>
+                <div class="col-md-6"><label class="form-label">Défense Spéciale</label><input type="number" class="form-control" [(ngModel)]="newPokemon.defense_special" name="defenseSpeciale" min="1"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Capacités -->
+          <h5 class="mt-4">Capacités</h5>
+          <!-- Display each capacité -->
+          <div *ngFor="let cap of newPokemon.capacites; let i = index" class="border p-2 mb-2">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Nom</label>
+                <input type="text" class="form-control" [(ngModel)]="cap.nom" name="cap_nom{{i}}">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Type d'attaque</label>
+                <select class="form-select" [(ngModel)]="cap.type_attaque" name="cap_type{{i}}">
+                  <option *ngFor="let t of pokemonTypes" [value]="t">{{ t }}</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Pouvoir</label>
+                <input type="number" class="form-control" [(ngModel)]="cap.pouvoir" name="cap_pouvoir{{i}}" min="1">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Utilisations</label>
+                <input type="number" class="form-control" [(ngModel)]="cap.total_utilisation" name="cap_total{{i}}" min="5">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Précision</label>
+                <input type="number" class="form-control" [(ngModel)]="cap.precision" name="cap_precision{{i}}" min="1">
+              </div>
+              <div class="col-md-6 mb-2">
+                <label class="form-label">Catégorie</label>
+                <select class="form-select" [(ngModel)]="cap.categorie_attaque" name="cap_categorie{{i}}">
+                  <option *ngFor="let c of attackCategories" [value]="c">{{ c }}</option>
+                </select>
+              </div>
+              <div class="col-md-12 mb-2">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-control" [(ngModel)]="cap.description" name="cap_desc{{i}}">
+              </div>
+              <div class="col-12 text-end">
+                <button type="button" class="btn btn-danger btn-sm" (click)="removeCapacite(i)">🗑️ Supprimer</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bouton pour ajouter une nouvelle capacité -->
+          <button type="button" class="btn btn-primary" (click)="addCapacite()">➕ Ajouter une capacité</button>
+
+          <!-- Boutons -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-success">Ajouter Pokémon</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

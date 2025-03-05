@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { NotificationService } from '../services/notification.service';
+
 
 @Component({
   selector: 'app-login',
@@ -12,11 +14,11 @@ import { Router } from '@angular/router';
     <h2>Login</h2>
     <div>
       <label for="username">Nom d'utilisateur:</label>
-      <input id="username" [(ngModel)]="username" type="text" />
+      <input id="username" [(ngModel)]="username" name="username" type="text" />
     </div>
     <div>
       <label for="password">Mot de passe:</label>
-      <input id="password" [(ngModel)]="password" type="password" />
+      <input id="password" [(ngModel)]="password" name="password" type="password" />
     </div>
     <button (click)="onLogin()">Login</button>
 
@@ -28,7 +30,11 @@ export class LoginComponent {
   password = '';
   message = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private notificationService: NotificationService
+  ) {}
 
   onLogin() {
     this.authService.login(this.username, this.password).subscribe({
@@ -44,6 +50,7 @@ export class LoginComponent {
       error: (err) => {
         // If 401 unauthorized, or some other error, handle it
         this.message = 'Login failed!';
+        this.notificationService.showError('Échec de la connexion : ' + err.message);
         console.error(err);
       }
     });

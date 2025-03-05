@@ -3,7 +3,7 @@
     <!-- Left Section: Image -->
     <div class="col-md-4">
       <div class="pokemon-box p-3">
-        <img [src]="pokemon.image" alt="{{pokemon.nom}}" class="pokemon-img img-fluid">
+        <img [src]="pokemon.image" alt="" class="pokemon-img img-fluid">
       </div>
     </div>
 
@@ -16,48 +16,166 @@
       </h2>
 
       <form #pokemonForm="ngForm">
-        <!-- Créateur -->
-        <div class="mb-3">
-          <label class="form-label">Créateur</label>
-          <input type="text" class="form-control" [(ngModel)]="pokemon.createur" name="createur" [readonly]="mode==='view'">
+        <!-- Image URL Field (Visible Only in Edit Mode) -->
+        <div *ngIf="mode === 'edit'" class="mb-3">
+          <label class="form-label">Image URL</label>
+          <input type="text" class="form-control" [(ngModel)]="pokemon.image" name="image">
         </div>
+
         <!-- Description -->
         <div class="mb-3">
           <label class="form-label">Description</label>
-          <textarea class="form-control" [(ngModel)]="pokemon.description" name="description" [readonly]="mode==='view'"></textarea>
-        </div>
-        <!-- Types -->
-        <div class="mb-3">
-          <label class="form-label">Types</label>
-          <input type="text" class="form-control" [(ngModel)]="pokemon.types" name="types" [readonly]="mode==='view'">
+          <textarea class="form-control" [(ngModel)]="pokemon.description" name="description" [disabled]="mode==='view'"></textarea>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Full-width fields -->
-  <div class="row mt-4">
-    <div class="col-12">
-      <div class="mb-3">
-        <label class="form-label">Nature</label>
-        <input type="text" class="form-control" [(ngModel)]="pokemon.nature" name="nature" [readonly]="mode==='view'">
+  <!-- Type, Nature & Sexe in a Single Column -->
+  <div class="col-12">
+    <!-- Pokémon Types Section -->
+    <div class="mb-3">
+      <label class="form-label">Types</label>
+      <div *ngIf="mode === 'edit'" class="d-flex">
+        <select class="form-select me-2" [(ngModel)]="newType" name="newType">
+          <option value="" disabled selected>Choisir un type</option>
+          <option *ngFor="let type of pokemonTypes" [value]="type">{{ type }}</option>
+        </select>
+        <button type="button" class="btn btn-primary" (click)="addType()" 
+                [disabled]="!newType || pokemon.types.length >= 2">➕ Ajouter</button>
+      </div>
+
+      <!-- Show up to 2 Type Badges -->
+      <div class="mt-2">
+        <span *ngFor="let type of pokemon.types; let i = index"
+              class="badge text-white fs-5 p-2 me-2"
+              [ngClass]="typeColors[type] || 'bg-secondary'">
+          {{ type }}
+          <button *ngIf="mode === 'edit'" type="button" class="btn btn-sm btn-light ms-2" (click)="removeType(i)">
+            ✖
+          </button>
+        </span>
       </div>
     </div>
 
-    <div class="col-12">
-      <div class="mb-3">
-        <label class="form-label">Sexe</label>
-        <input type="text" class="form-control" [(ngModel)]="pokemon.sexe" name="sexe" [readonly]="mode==='view'">
+    <!-- Evolution & Sous-Évolution in the Same Row -->
+    <div class="row mt-3">
+      <div class="col-6">
+        <label class="form-label">Évolution</label>
+        <input *ngIf="mode === 'edit'" type="text" class="form-control" [(ngModel)]="pokemon.evolution" name="evolution">
+        <input *ngIf="mode === 'view'" type="text" class="form-control" [value]="pokemon.evolution" disabled>
+      </div>
+
+      <div class="col-6">
+        <label class="form-label">Sous-Évolution</label>
+        <input *ngIf="mode === 'edit'" type="text" class="form-control" [(ngModel)]="pokemon.sous_evolution" name="sous_evolution">
+        <input *ngIf="mode === 'view'" type="text" class="form-control" [value]="pokemon.sous_evolution" disabled>
       </div>
     </div>
 
-    <div class="col-12">
+    <div class="mb-3">
+      <label class="form-label">Nature</label>
+      <select *ngIf="mode === 'edit'" class="form-select" [(ngModel)]="pokemon.nature" name="nature">
+        <option *ngFor="let nature of natures" [value]="nature">{{ nature }}</option>
+      </select>
+      <input *ngIf="mode === 'view'" type="text" class="form-control" [value]="pokemon.nature" disabled>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Sexe</label>
+      <select *ngIf="mode === 'edit'" class="form-select" [(ngModel)]="pokemon.sexe" name="sexe">
+        <option *ngFor="let sexe of sexes" [value]="sexe">{{ sexe }}</option>
+      </select>
+      <input *ngIf="mode === 'view'" type="text" class="form-control" [value]="pokemon.sexe" disabled>
+    </div>
+  </div>
+
+  <!-- Région d'Origine -->
+  <div class="mb-3">
+    <label class="form-label">Région d'origine</label>
+    <input *ngIf="mode === 'edit'" type="text" class="form-control" [(ngModel)]="pokemon.region_origine" name="region_origine">
+    <input *ngIf="mode === 'view'" type="text" class="form-control" [value]="pokemon.region_origine" disabled>
+  </div>
+
+  <!-- Capacité Spéciale -->
+  <div class="mb-3">
+    <label class="form-label">Capacité Spéciale</label>
+    <input *ngIf="mode === 'edit'" type="text" class="form-control" [(ngModel)]="pokemon.capacite_speciale" name="capacite_speciale">
+    <input *ngIf="mode === 'view'" type="text" class="form-control" [value]="pokemon.capacite_speciale" disabled>
+  </div>
+
+  <!-- Poids & Taille on the Same Row -->
+  <div class="row mt-3">
+    <div class="col-6">
+      <label class="form-label">Poids (kg)</label>
+      <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.poids" disabled>
+      <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.poids" name="poids">
+    </div>
+    <div class="col-6">
+      <label class="form-label">Taille (m)</label>
+      <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.taille" disabled>
+      <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.taille" name="taille">
+    </div>
+  </div>
+
+  <!-- Stats Box -->
+  <div class="card shadow-sm mt-4">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Stats</h5>
+    </div>
+    <div class="card-body">
+      <!-- Niveau & Points de Vie on the Same Row -->
+      <div class="row">
+        <div class="col-6">
+          <label class="form-label">Niveau</label>
+          <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.niveau" disabled>
+          <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.niveau" name="niveau">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Points de Vie</label>
+          <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.points_de_vie" disabled>
+          <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.points_de_vie" name="points_de_vie">
+        </div>
+      </div>
+
+      <!-- Vitesse -->
       <div class="mb-3">
-        <label class="form-label">Capacité spéciale</label>
-        <input type="text" class="form-control" [(ngModel)]="pokemon.capacite_speciale" name="capacite_speciale" [readonly]="mode==='view'">
+        <label class="form-label">Vitesse</label>
+        <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.vitesse" disabled>
+        <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.vitesse" name="vitesse">
+      </div>
+
+      <!-- Attaque & Attaque Spéciale on the Same Row -->
+      <div class="row">
+        <div class="col-6">
+          <label class="form-label">Attaque</label>
+          <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.attaque" disabled>
+          <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.attaque" name="attaque">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Attaque Spéciale</label>
+          <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.attaque_special" disabled>
+          <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.attaque_special" name="attaque_special">
+        </div>
+      </div>
+
+      <!-- Défense & Défense Spéciale on the Same Row -->
+      <div class="row mt-3">
+        <div class="col-6">
+          <label class="form-label">Défense</label>
+          <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.defense" disabled>
+          <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.defense" name="defense">
+        </div>
+        <div class="col-6">
+          <label class="form-label">Défense Spéciale</label>
+          <input *ngIf="mode === 'view'" type="number" class="form-control" [value]="pokemon.defense_special" disabled>
+          <input *ngIf="mode === 'edit'" type="number" class="form-control" [(ngModel)]="pokemon.defense_special" name="defense_special">
+        </div>
       </div>
     </div>
   </div>
+
 
   <!-- Capacités Table -->
   <h4 class="mt-4">Capacités</h4>
@@ -77,14 +195,22 @@
     </thead>
     <tbody>
       <tr *ngFor="let cap of pokemon.capacites; let i = index">
-        <td><input type="text" class="form-control" [(ngModel)]="cap.nom" name="cap_nom{{i}}" [readonly]="mode==='view'"></td>
-        <td class="col-type"><input type="text" class="form-control" [(ngModel)]="cap.type_attaque" name="cap_type{{i}}" [readonly]="mode==='view'"></td>
-        <td><input type="text" class="form-control" [(ngModel)]="cap.description" name="cap_desc{{i}}" [readonly]="mode==='view'"></td>
-        <td class="col-pouvoir"><input type="number" class="form-control" [(ngModel)]="cap.pouvoir" name="cap_pouvoir{{i}}" [readonly]="mode==='view'"></td>
-        <td class="col-precision"><input type="number" class="form-control" [(ngModel)]="cap.precision" name="cap_precision{{i}}" [readonly]="mode==='view'"></td>
-        <td class="col-utilisation"><input type="number" class="form-control" [(ngModel)]="cap.total_utilisation" name="cap_total{{i}}" [readonly]="mode==='view'"></td>
-        <td class="col-categorie"><input type="text" class="form-control" [(ngModel)]="cap.categorie_attaque" name="cap_categorie{{i}}" [readonly]="mode==='view'"></td>
-        <td><input type="text" class="form-control" [(ngModel)]="cap.effet_secondaire" name="cap_effet{{i}}" [readonly]="mode==='view'"></td>
+        <td><input type="text" class="form-control" [(ngModel)]="cap.nom" name="cap_nom{{i}}" [disabled]="mode==='view'"></td>
+        <td>
+          <select class="form-select me-2" [(ngModel)]="cap.type_attaque" [disabled]="mode === 'view'">
+            <option *ngFor="let type of pokemonTypes" [value]="type">{{ type }}</option>
+          </select>
+        </td>
+        <td><textarea type="text" class="form-control" [(ngModel)]="cap.description" name="cap_desc{{i}}" [disabled]="mode==='view'"></textarea></td>
+        <td class="col-pouvoir"><input type="number" class="form-control" [(ngModel)]="cap.pouvoir" name="cap_pouvoir{{i}}" [disabled]="mode==='view'"></td>
+        <td class="col-precision"><input type="number" class="form-control" [(ngModel)]="cap.precision" name="cap_precision{{i}}" [disabled]="mode==='view'"></td>
+        <td class="col-utilisation"><input type="number" class="form-control" [(ngModel)]="cap.total_utilisation" name="cap_total{{i}}" [disabled]="mode==='view'"></td>
+        <td>
+          <select class="form-select me-2" [(ngModel)]="cap.categorie_attaque" [disabled]="mode === 'view'">
+            <option *ngFor="let category of attackCategories" [value]="category">{{ category }}</option>
+          </select>
+        </td>
+        <td><textarea type="text" class="form-control" [(ngModel)]="cap.effet_secondaire" name="cap_effet{{i}}" [disabled]="mode==='view'"></textarea></td>
       
         <td class="col-action" *ngIf="mode==='edit'">
           <button type="button" class="btn btn-danger btn-delete" (click)="deleteCapacite(i)">

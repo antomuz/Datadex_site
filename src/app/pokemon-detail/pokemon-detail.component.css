@@ -1,25 +1,25 @@
 /* Image Styling */
 .pokemon-box {
-    border: 2px solid #ddd; /* Creates a box around the image */
-    border-radius: 10px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    
-    /* Center the image properly */
-    display: flex;
-    align-items: center;  /* Centers vertically */
-    justify-content: center; /* Centers horizontally */
+  border: 2px solid #ddd; /* Creates a box around the image */
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
   
-    height: 300px;  /* Adjust for a consistent look */
-    width: 100%; /* Full width of its parent */
-  }
-  
-  .pokemon-img {
-    width: 100%;  /* Forces image to fill container width */
-    height: 100%; /* Forces image to fill container height */
-    object-fit: cover; /* Ensures it scales properly */
-    border-radius: 10px; /* Optional: Make corners match the box */
-  }
+  /* Center the image properly */
+  display: flex;
+  align-items: center;  /* Centers vertically */
+  justify-content: center; /* Centers horizontally */
+
+  height: 300px;  /* Adjust for a consistent look */
+  width: 100%; /* Full width of its parent */
+}
+
+.pokemon-img {
+  width: 100%;  /* Forces image to fill container width */
+  height: 100%; /* Forces image to fill container height */
+  object-fit: cover; /* Ensures it scales properly */
+  border-radius: 10px; /* Optional: Make corners match the box */
+}
   
 /* Table Styling */
 .capacite-table th,
@@ -51,10 +51,30 @@
 
 /* Button spacing */
 .btn-delete {
-    padding: 3px 10px;
-    font-size: 14px;
-  }
-  
-  .btn-add-capacite {
-    margin-top: 10px;
-  }
+  padding: 3px 10px;
+  font-size: 14px;
+}
+
+.btn-add-capacite {
+  margin-top: 10px;
+}
+
+.bg-brown {
+  background-color: #8B4513 !important; /* Dark Brown */
+}
+
+.bg-purple {
+  background-color: #6A0DAD !important; /* Purple */
+}
+
+.bg-orange {
+  background-color: #FF8C00 !important; /* Orange */
+}
+
+.bg-pink {
+  background-color: #FF1493 !important; /* Deep Pink */
+}
+
+.bg-teal {
+  background-color: #008080 !important; /* Teal */
+}

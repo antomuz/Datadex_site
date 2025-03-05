@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { NotificationService } from '../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -33,7 +34,11 @@ export class RegisterComponent {
   roles = 'USER'; // or 'ADMIN'
   message = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private notificationService: NotificationService
+  ) {}
 
   onRegister() {
     const userData = {
@@ -53,6 +58,7 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.message = 'Registration error!';
+        this.notificationService.showError('Échec de l\'inscription : ' + err.message);
         console.error(err);
       },
     });

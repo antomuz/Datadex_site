@@ -11,4 +11,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'pokemon/view/:id', component: PokemonDetailComponent },
   { path: 'pokemon/edit/:id', component: PokemonDetailComponent },
+  { path: 'pokemon/name/:name', component: PokemonDetailComponent }, 
 ];

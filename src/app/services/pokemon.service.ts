@@ -19,7 +19,11 @@ export class PokemonService {
   }
   
   getPokemonById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/pokemons/${id}`);
+    return this.http.get<any>(`${this.baseUrl}/pokemons/id/${id}`);
+  }
+
+  getPokemonByName(name: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/pokemons/name/${name}`);
   }
 
   updatePokemon(pokemon: any): Observable<any> {
@@ -37,4 +41,16 @@ export class PokemonService {
 
     return this.http.put<any>(`${this.baseUrl}/pokemons`, pokemonWithoutId, { headers });
   }
+
+  /**
+   * Add a new Pokémon (POST request)
+   */
+    addPokemon(pokemon: any, user: string, pwd: string): Observable<any> {
+      const authToken = btoa(`${user}:${pwd}`); // Basic Auth
+      const headers = new HttpHeaders({
+        Authorization: `Basic ${authToken}`
+      });
+  
+      return this.http.post<any>(`${this.baseUrl}/pokemons`, pokemon, { headers });
+    }
 }

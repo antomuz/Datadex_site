@@ -1,0 +1,27 @@
+.notification-container {
+    position: fixed;
+    bottom: 20px;     /* bottom alignment */
+    right: 20px;      /* right alignment */
+    z-index: 9999;    /* ensure it's on top */
+  }
+  
+  .toast-error {
+    background-color: #dc3545; /* red background for error */
+    color: #fff;
+    padding: 10px 15px;
+    margin-top: 5px;
+    border-radius: 4px;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    /* total 3s: fade in 0.5s, stay 2s, fade out 0.5s */
+  }
+  
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  @keyframes fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  
