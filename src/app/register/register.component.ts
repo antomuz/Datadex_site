@@ -27,6 +27,7 @@ import { NotificationService } from '../services/notification.service';
 
     <p>{{ message }}</p>
   `,
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
   username = '';

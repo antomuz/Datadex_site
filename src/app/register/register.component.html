@@ -1,15 +1,28 @@
-<h2>Register</h2>
-<div>
-  <label for="username">Nom d'utilisateur:</label>
-  <input id="username" [(ngModel)]="username" type="text" />
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card p-4 shadow" style="max-width: 400px; width: 100%;">
+    <h2 class="text-center mb-4">Register</h2>
+    <div class="mb-3">
+      <label for="username" class="form-label">Nom d'utilisateur</label>
+      <input
+        id="username"
+        type="text"
+        class="form-control"
+        [(ngModel)]="username"
+        name="username"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Mot de passe</label>
+      <input
+        id="password"
+        type="password"
+        class="form-control"
+        [(ngModel)]="password"
+        name="password"
+      />
+    </div>
+
+    
+    <button class="btn btn-success w-100" (click)="onRegister()">S'enregistrer</button>
+  </div>
 </div>
-<div>
-  <label for="password">Mot de passe:</label>
-  <input id="password" [(ngModel)]="password" type="password" />
-</div>
-<div>
-  <label for="roles">Roles:</label>
-  <input id="roles" [(ngModel)]="roles" type="text" />
-</div>
-<button (click)="onRegister()">Register</button>
-<p>{{ message }}</p>

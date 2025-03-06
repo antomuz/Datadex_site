@@ -131,7 +131,7 @@
               <button type="button" class="btn btn-primary" (click)="addType()" [disabled]="!newType || newPokemon.types.length >= 2">➕ Ajouter</button>
             </div>
             <div class="mt-2">
-              <span *ngFor="let type of newPokemon.types; let i = index" class="badge bg-info text-dark fs-5 p-2 me-2">
+              <span *ngFor="let type of newPokemon.types; let i = index" class="badge text-white_ fs-5 p-2 me-2" [style.background]="typeColors[type] || '#A8A8A8'">
                 {{ type }}
                 <button type="button" class="btn btn-sm btn-light ms-2" (click)="removeType(i)">✖</button>
               </span>
@@ -236,7 +236,7 @@
               <div class="col-md-6 mb-2">
                 <label class="form-label">Type d'attaque</label>
                 <select class="form-select" [(ngModel)]="cap.type_attaque" name="cap_type{{i}}">
-                  <option *ngFor="let t of pokemonTypes" [value]="t">{{ t }}</option>
+                  <option *ngFor="let t of pokemonTypes" [value]="t" >{{ t }}</option>
                 </select>
               </div>
               <div class="col-md-6 mb-2">

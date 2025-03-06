@@ -24,6 +24,7 @@ import { NotificationService } from '../services/notification.service';
 
     <p>{{ message }}</p>
   `,
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   username = '';
