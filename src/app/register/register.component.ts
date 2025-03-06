@@ -52,7 +52,15 @@ export class RegisterComponent {
       next: (response) => {
         localStorage.setItem('username', userData.user);
         localStorage.setItem('password', userData.password);
-        this.message = 'Registration successful! ' + JSON.stringify(response);
+        this.message = response;
+
+        const match = response.match(/\[(.+)\]/); 
+
+        if (match && match[1]) {
+          const role = match[1];  // e.g. "ADMIN"
+          // Store in localStorage
+          localStorage.setItem('Role', role);
+        }
 
         this.router.navigate(['/home']);
       },

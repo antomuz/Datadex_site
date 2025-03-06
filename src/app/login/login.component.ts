@@ -45,6 +45,14 @@ export class LoginComponent {
         localStorage.setItem('password', this.password);
         console.log('Response from /api/users:', res);
 
+        const match = res.match(/\[(.+)\]/); 
+
+        if (match && match[1]) {
+          const role = match[1];  // e.g. "ADMIN"
+          // Store in localStorage
+          localStorage.setItem('Role', role);
+        }
+
         this.router.navigate(['/home']);
       },
       error: (err) => {

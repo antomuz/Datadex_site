@@ -17,15 +17,15 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <!-- Show Login/Register if NOT logged in -->
         <li class="nav-item" *ngIf="!isLoggedIn">
-          <a class="nav-link" routerLink="/login">Login</a>
+          <a class="nav-link" routerLink="/login">Connexion</a>
         </li>
         <li class="nav-item" *ngIf="!isLoggedIn">
-          <a class="nav-link" routerLink="/register">Register</a>
+          <a class="nav-link" routerLink="/register">Inscription</a>
         </li>
 
         <!-- Show 'Disconnect' if logged in -->
         <li class="nav-item" *ngIf="isLoggedIn">
-          <a class="nav-link" (click)="onDisconnect()">Disconnect</a>
+          <a class="nav-link" (click)="onDisconnect()">Déconnection</a>
         </li>
       </ul>
     </div>
@@ -33,13 +33,13 @@
 </nav>
 
 <div class="container mt-4">
-  <h2>Pokémon List</h2>
+  <h2>Pokedex :</h2>
   <table class="table table-striped align-middle">
     <thead>
       <tr>
-        <th scope="col">ID</th>
+        <th scope="col">Numéro</th>
         <th scope="col"></th> <!-- Image column (no title) -->
-        <th scope="col">Name</th>
+        <th scope="col">Nom</th>
         <th scope="col">Types</th>
         <th scope="col">Region</th>
         <th scope="col">Evolution</th>
@@ -63,7 +63,7 @@
           <!-- If user is NOT logged in OR not the creator, show "Visualiser" -->
           <button
             *ngIf="!currentUser || !isCreator(p)"
-            class="btn btn-primary"
+            class="btn btn-primary btn-visualiser"
             [routerLink]="['/pokemon/view', p['identifiant unique']]">
             Visualiser
           </button>
@@ -71,9 +71,18 @@
           <!-- If user is logged in AND is the creator, show "Edit" -->
           <button
             *ngIf="currentUser && isCreator(p)"
-            class="btn btn-warning"
+            class="btn btn-warning btn-edit me-2"
             [routerLink]="['/pokemon/edit', p['identifiant unique']]">
-            Edit
+            Editer
+          </button>
+
+            <!-- New Delete button, same visibility condition as Edit -->
+          <button
+            *ngIf="currentUser && isCreator(p)"
+            class="btn btn-danger btn-delete"
+            (click)="onDeletePokemon(p['identifiant unique'])"
+            >
+            Delete
           </button>
         </td>
       </tr>
@@ -251,6 +260,10 @@
               <div class="col-md-12 mb-2">
                 <label class="form-label">Description</label>
                 <input type="text" class="form-control" [(ngModel)]="cap.description" name="cap_desc{{i}}">
+              </div>
+              <div class="col-md-12 mb-2">
+                <label class="form-label">Effet Secondaire</label>
+                <input type="text" class="form-control" [(ngModel)]="cap.effet_secondaire" name="cap_effetSecondaire{{i}}"/>
               </div>
               <div class="col-12 text-end">
                 <button type="button" class="btn btn-danger btn-sm" (click)="removeCapacite(i)">🗑️ Supprimer</button>

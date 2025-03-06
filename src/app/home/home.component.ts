@@ -14,6 +14,7 @@ declare var bootstrap: any; // Required for Bootstrap modal support
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
+  isAdmin = localStorage.getItem('Role') == "ADMIN";
   isLoggedIn = false;
   pokemons: any[] = [];
   currentUser: string | null = null;  // null if not logged in
@@ -134,14 +135,24 @@ export class HomeComponent implements OnInit {
   
     this.pokemonService.addPokemon(this.newPokemon, user, pwd).subscribe({
       next: () => {
-        alert("Pokémon ajouté avec succès !");
-        this.loadPokemons(); // Reload Pokémon list
+        alert('Pokémon ajouté avec succès !');
+        this.loadPokemons(); 
         const modal = bootstrap.Modal.getInstance(document.getElementById('addPokemonModal'));
         modal.hide();
       },
       error: (err) => {
         console.error('Error adding Pokémon:', err);
-        alert("Erreur lors de l'ajout du Pokémon.");
+  
+        // If the backend returns an array of validation messages:
+        if (Array.isArray(err.error)) {
+          // For each message in the array, show a separate error notification
+          err.error.forEach((msg: string) => {
+            this.notificationService.showError(msg);
+          });
+        } else {
+          // Fallback if it's not an array
+          this.notificationService.showError('Erreur lors de l\'ajout du Pokémon : ' + err.message);
+        }
       }
     });
   }
@@ -157,7 +168,7 @@ export class HomeComponent implements OnInit {
 
   // A small helper to check if the current user created a given pokemon
   isCreator(pokemon: any): boolean {
-    return this.currentUser !== null && pokemon.createur === this.currentUser;
+    return (this.currentUser !== null && pokemon.createur === this.currentUser) || this.isAdmin;
   }
 
   removeCapacite(index: number) {
@@ -165,6 +176,22 @@ export class HomeComponent implements OnInit {
       this.newPokemon.capacites.splice(index, 1);
     } else {
       alert("Un Pokémon doit avoir au moins une capacité.");
+    }
+  }
+
+  onDeletePokemon(id: number) {
+    if (confirm('Voulez-vous vraiment supprimer ce Pokémon ?')) {
+      this.pokemonService.deletePokemon(id).subscribe({
+        next: (res) => {
+          alert('Pokémon supprimé avec succès.');
+          // Re-fetch or update local array
+          this.loadPokemons();
+        },
+        error: (err) => {
+          alert('Erreur lors de la suppression du Pokémon : ' + err.message);
+          console.error(err);
+        }
+      });
     }
   }
 }

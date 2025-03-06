@@ -1,0 +1,11 @@
+.btn-visualiser {
+    width: 120px; /* total width for single button */
+  }
+  
+  .btn-edit {
+    width: 50px;  /* We'll say 50px for Edit */
+  }
+  
+  .btn-delete {
+    width: 62px;  /* We'll say 62px for Delete */
+  }

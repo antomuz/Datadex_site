@@ -43,14 +43,28 @@ export class PokemonService {
   }
 
   /**
-   * Add a new Pokémon (POST request)
-   */
-    addPokemon(pokemon: any, user: string, pwd: string): Observable<any> {
-      const authToken = btoa(`${user}:${pwd}`); // Basic Auth
-      const headers = new HttpHeaders({
-        Authorization: `Basic ${authToken}`
-      });
+ * Add a new Pokémon (POST request)
+ */
+  addPokemon(pokemon: any, user: string, pwd: string): Observable<any> {
+    const authToken = btoa(`${user}:${pwd}`); // Basic Auth
+    const headers = new HttpHeaders({
+      Authorization: `Basic ${authToken}`
+    });
+
+    return this.http.post<any>(`${this.baseUrl}/pokemons`, pokemon, { headers });
+  }
+
+  deletePokemon(id: number) {
+    // If you need credentials:
+    const user = localStorage.getItem('username');
+    const pwd = localStorage.getItem('password');
+    const authToken = btoa(`${user}:${pwd}`);
   
-      return this.http.post<any>(`${this.baseUrl}/pokemons`, pokemon, { headers });
-    }
+    const headers = new HttpHeaders({
+      Authorization: `Basic ${authToken}`
+    });
+  
+    // Adjust your URL as necessary
+    return this.http.delete(`${this.baseUrl}/pokemons/${id}`, { headers });
+  }
 }

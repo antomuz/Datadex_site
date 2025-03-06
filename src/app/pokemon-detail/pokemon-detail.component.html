@@ -50,7 +50,7 @@
       <div class="mt-2">
         <span *ngFor="let type of pokemon.types; let i = index"
               class="badge text-white fs-5 p-2 me-2"
-              [ngClass]="typeColors[type] || 'bg-secondary'">
+              [style.background]="typeColors[type] || '#A8A8A8'">
           {{ type }}
           <button *ngIf="mode === 'edit'" type="button" class="btn btn-sm btn-light ms-2" (click)="removeType(i)">
             ✖

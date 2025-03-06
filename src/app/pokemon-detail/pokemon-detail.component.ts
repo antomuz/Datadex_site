@@ -27,26 +27,25 @@ export class PokemonDetailComponent implements OnInit {
     "SOL", "VOL", "PSY", "INSECTE", "ROCHE", "SPECTRE", "DRAGON", "TENEBRES", 
     "ACIER", "FEE"
   ];
-
   typeColors: { [key: string]: string } = {
-    "BUG": "bg-success", // Green
-    "DARK": "bg-dark", // Black
-    "DRAGON": "bg-info", // Cyan
-    "ELECTRIK": "bg-warning", // Yellow
-    "FAIRY": "bg-danger", // Pink
-    "FIGHTING": "bg-orange", // Orange (custom CSS needed)
-    "FIRE": "bg-danger", // Red
-    "FLYING": "bg-primary", // Light Blue
-    "GHOST": "bg-purple", // Purple (custom CSS needed)
-    "GRASS": "bg-success", // Green
-    "GROUND": "bg-brown", // Brown (custom CSS needed)
-    "ICE": "bg-info", // Light Blue
-    "NORMAL": "bg-secondary", // Gray
-    "POISON": "bg-purple", // Purple (custom CSS needed)
-    "PSYCHIC": "bg-pink", // Magenta (custom CSS needed)
-    "ROCK": "bg-brown", // Brown (custom CSS needed)
-    "STEEL": "bg-teal", // Steel Gray (custom CSS needed)
-    "WATER": "bg-primary" // Blue
+    INSECTE:  "#A8B820",  // bug-green
+    TENEBRES: "#705848",  // dark-brownish
+    DRAGON:   "#7038F8",  // purple-blue
+    ELECTRIK: "#F8D030",  // electric-yellow
+    FEE:      "#EE99AC",  // fairy-pink
+    COMBAT:   "#C03028",  // fighting-reddish
+    FEU:      "#F08030",  // fire-orange
+    VOL:      "#A890F0",  // flying-purple/blue
+    SPECTRE:  "#705898",  // ghost-purple
+    PLANTE:   "#78C850",  // grass-green
+    SOL:      "#E0C068",  // ground-tan
+    GLACE:    "#98D8D8",  // ice-cyan
+    NORMAL:   "#A8A878",  // normal-grayish
+    POISON:   "#A040A0",  // poison-purple
+    PSY:      "#F85888",  // psychic-pink
+    ROCHE:    "#B8A038",  // rock-brown
+    ACIER:    "#B8B8D0",  // steel-gray
+    EAU:      "#6890F0"   // water-blue
   };
 
   natures: string[] = [
